@@ -16,21 +16,15 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    console.log('montirovanie');
     const contactsFromLocal = localStorage.getItem('contacts');
-    console.log(contactsFromLocal);
     const parseContactsFromLocal = JSON.parse(contactsFromLocal);
-    console.log(parseContactsFromLocal);
     if (parseContactsFromLocal) {
       this.setState({ contacts: parseContactsFromLocal });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('update');
-
     if (this.state.contacts !== prevState.contacts) {
-      console.log('raznica');
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
