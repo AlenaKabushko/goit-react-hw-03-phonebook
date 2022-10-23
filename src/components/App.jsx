@@ -2,21 +2,42 @@ import { Component } from 'react';
 import ContactList from './Contacts/Contacts';
 import { Form } from './Form/Form';
 import Filter from './Filter/Filter';
+import { Notify } from 'notiflix';
 
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
   };
 
+  componentDidMount() {
+    console.log('montirovanie');
+    const contactsFromLocal = localStorage.getItem('contacts');
+    console.log(contactsFromLocal);
+    const parseContactsFromLocal = JSON.parse(contactsFromLocal);
+    console.log(parseContactsFromLocal);
+    if (parseContactsFromLocal) {
+      this.setState({ contacts: parseContactsFromLocal });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('update');
+
+    if (this.state.contacts !== prevState.contacts) {
+      console.log('raznica');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   formData = data => {
     if (this.state.contacts.find(contact => contact.name === data.name)) {
-      alert(`${data.name} is already in contacts`);
+      Notify.warning(`${data.name} is already in contacts`);
       return false;
     }
     this.setState(prevState => ({
